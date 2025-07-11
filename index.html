@@ -4,20 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>soran.link | そら VRC</title>
-
-    <!-- ========== OGP (Open Graph Protocol)タグ ========== -->
     <meta property="og:title" content="soran.link | そら">
     <meta property="og:description" content="VRChatで遊んでいる「そら」のサイトです。">
     <meta property="og:image" content="https://soran.link/img/ogp.jpg">
     <meta property="og:url" content="https://soran.link">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
-    <!-- OGPここまで -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=M+PLUS+1:wght@400;700&display=swap" rel="stylesheet">
-
     <style>
         body {
             font-family: 'M PLUS 1', sans-serif;
@@ -26,7 +22,7 @@
             background-image: url('img/background_sora.jpg');
             background-size: cover;
             background-position: center top;
-            background-attachment: fixed; /* 背景をビューポートに固定します */
+            background-attachment: fixed;
         }
         #content-wrapper {
             opacity: 0;
@@ -45,6 +41,9 @@
         .fade-in-section.is-visible {
             opacity: 1;
             transform: translateY(0);
+        }
+        #modal {
+            transition: opacity 0.3s ease-in-out;
         }
     </style>
 </head>
@@ -74,9 +73,9 @@
                 <div class="space-y-4 text-slate-600">
                     <p>ここにあなたの趣味や好きなことについて記述します。箇条書きにしたり、自由に表現してみてください。</p>
                     <ul class="list-disc list-inside space-y-2 pl-2">
-                        <li>好き: </li>
-                        <li>趣味2: 例) 年に数回、自然豊かな場所へ旅行に行くこと。</li>
-                        <li>趣味3: 例) 新しい技術やデザインのトレンドを追いかけること。</li>
+                        <li>好き: コードを書くこと、お酒を飲むこと、アニメを見ること</li>
+                        <li>趣味: コンサートに行くこと（BUMP OF CHICKEN, sumika, ゲーム音楽: FINAL FANTASY、原神、アニメ: ）</li>
+                        <li>ゲーム: 最近は遊んでおらず…</li>
                     </ul>
                 </div>
             </div>
@@ -117,24 +116,27 @@
                 </div>
             </div>
         </section>
-
-        <!-- ========== お問い合わせセクション ========== -->
-<!--        <section id="contact" class="py-16 md:py-24 text-center border-t border-slate-200 fade-in-section">-->
-<!--            <h2 class="text-3xl font-bold text-slate-900 mb-4">Get In Touch</h2>-->
-<!--            <p class="max-w-xl mx-auto mb-8 text-slate-600">-->
-<!--                お仕事のご依頼やご相談など、お気軽にご連絡ください。-->
-<!--            </p>-->
-<!--            <a href="mailto:your.email@example.com"-->
-<!--               class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-10 rounded-full transition-colors duration-300 inline-block">-->
-<!--                メールを送る-->
-<!--            </a>-->
-<!--        </section>-->
+        <section id="photos" class="py-16 md:py-24 border-t border-slate-200 fade-in-section">
+            <div class="max-w-5xl mx-auto">
+                <h2 class="text-2xl font-bold text-slate-900 mb-8 text-center">Recent Photos</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <!-- 写真をクリックすると拡大表示されます。srcにあなたの写真のパスを入れてください。 -->
+                    <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1964&auto=format&fit=crop" alt="好きな写真1" class="photo-thumbnail w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-80 transition-opacity">
+                    <img src="https://images.unsplash.com/photo-1617791160536-595a724029a8?q=80&w=1964&auto=format&fit=crop" alt="好きな写真2" class="photo-thumbnail w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-80 transition-opacity">
+                    <img src="https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?q=80&w=1887&auto=format&fit=crop" alt="好きな写真3" class="photo-thumbnail w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-80 transition-opacity">
+                </div>
+            </div>
+        </section>
     </main>
     <footer class="bg-slate-100/70 text-slate-600">
         <div class="px-6 py-6 text-center text-sm">
             <p>&copy; 2025 soran.link. All Rights Reserved.</p>
         </div>
     </footer>
+</div>
+<div id="modal" class="fixed inset-0 bg-black bg-opacity-80 z-50 hidden flex items-center justify-center p-4">
+    <img id="modal-img" src="" alt="拡大写真" class="max-w-full max-h-full object-contain rounded-lg">
+    <button id="modal-close" class="absolute top-5 right-5 text-white text-5xl font-bold">&times;</button>
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -161,6 +163,33 @@
         sections.forEach(section => {
             observer.observe(section);
         });
+
+        // --- 写真拡大モーダルのための処理 ---
+        const photoThumbnails = document.querySelectorAll('.photo-thumbnail');
+        const modal = document.getElementById('modal');
+        const modalImg = document.getElementById('modal-img');
+        const modalClose = document.getElementById('modal-close');
+
+        if (modal) {
+            photoThumbnails.forEach(thumbnail => {
+                thumbnail.addEventListener('click', () => {
+                    modalImg.src = thumbnail.src; // クリックされた画像のsrcをモーダルに設定
+                    modal.classList.remove('hidden'); // モーダルを表示
+                });
+            });
+
+            // 閉じるボタンがクリックされたらモーダルを隠す
+            modalClose.addEventListener('click', () => {
+                modal.classList.add('hidden');
+            });
+
+            // 背景（オーバーレイ）がクリックされたらモーダルを隠す
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                }
+            });
+        }
     });
 </script>
 
