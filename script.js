@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         // ワールド情報をクリアしてから設定
                         modalWorld.innerHTML = '';
                         if (worldName) {
-                            if (worldLink) {
+                            if (worldLink && worldLink !== '#') {
                                 const link = document.createElement('a');
                                 link.href = worldLink;
                                 link.target = '_blank';
