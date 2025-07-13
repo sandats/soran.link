@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     sections.forEach(section => observer.observe(section));
 
-    // --- 月別の写真ギャラリー生成 ---
+    // --- 月別の写真ギャラリー生成（photo.htmlのみで実行） ---
     const photoGalleryContainer = document.getElementById('photo-gallery-container');
     const photoDataSource = document.getElementById('photo-data-source');
 
@@ -26,7 +26,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const photos = Array.from(photoDataSource.querySelectorAll('img'));
         const groupedPhotos = photos.reduce((groups, photo) => {
             const date = photo.dataset.date;
-            // ▼▼▼ data-dateが存在する画像のみをグループ分けの対象にするように修正 ▼▼▼
             if (date && date.match(/^\d{4}-\d{2}-\d{2}$/)) {
                 const yearMonth = date.substring(0, 7); // "2025-07"
                 if (!groups[yearMonth]) {
@@ -54,11 +53,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 gridContainer.appendChild(photo);
             });
         });
-
-        // --- 動的に生成された写真に対して、モーダルと遅延読み込みを適用 ---
-        initializeModal();
-        initializeLazyLoading();
     }
+
+    // --- すべてのページでモーダルと遅延読み込みを初期化 ---
+    initializeModal();
+    initializeLazyLoading();
 
 
     // --- 写真拡大モーダルのための処理を関数化 ---
@@ -67,33 +66,64 @@ document.addEventListener('DOMContentLoaded', function() {
         const modal = document.getElementById('modal');
         const modalImg = document.getElementById('modal-img');
         const modalClose = document.getElementById('modal-close');
+
+        // キャプション関連の要素は、存在する場合のみ取得
         const modalCaption = document.getElementById('modal-caption');
         const modalTitle = document.getElementById('modal-title');
         const modalDate = document.getElementById('modal-date');
+        const modalWorld = document.getElementById('modal-world'); // ワールド表示用の要素を取得
 
-        if (modal) {
+        if (modal && photoThumbnails.length > 0) {
             photoThumbnails.forEach(thumbnail => {
                 thumbnail.addEventListener('click', () => {
-                    const title = thumbnail.alt || '';
-                    const date = thumbnail.dataset.date || '';
                     const highResSrc = thumbnail.dataset.src || thumbnail.src;
-
                     modalImg.src = highResSrc;
-                    modalImg.alt = title;
-                    modalTitle.textContent = title;
-                    modalDate.textContent = date;
+                    modalImg.alt = thumbnail.alt || '';
+
+                    // キャプション要素が存在する場合のみ、テキストを設定
+                    if (modalCaption && modalTitle && modalDate && modalWorld) {
+                        const title = thumbnail.alt || '';
+                        const date = thumbnail.dataset.date || '';
+                        const worldName = thumbnail.dataset.worldName || '';
+                        const worldLink = thumbnail.dataset.worldLink || '';
+
+                        modalTitle.textContent = title;
+                        modalDate.textContent = date;
+
+                        // ワールド情報をクリアしてから設定
+                        modalWorld.innerHTML = '';
+                        if (worldName) {
+                            if (worldLink && worldLink !== '#') {
+                                const link = document.createElement('a');
+                                link.href = worldLink;
+                                link.target = '_blank';
+                                link.rel = 'noopener noreferrer';
+                                link.className = 'text-blue-400 hover:underline';
+                                link.textContent = `World: ${worldName}`;
+                                modalWorld.appendChild(link);
+                            } else {
+                                modalWorld.textContent = `World: ${worldName}`;
+                            }
+                        }
+
+                        setTimeout(() => {
+                            modalCaption.classList.remove('opacity-0');
+                        }, 100);
+                    }
 
                     modal.classList.remove('hidden');
-                    setTimeout(() => modalCaption.classList.remove('opacity-0'), 100);
                 });
             });
 
             const closeModal = () => {
                 modal.classList.add('hidden');
-                modalCaption.classList.add('opacity-0');
+                // キャプション要素が存在する場合のみ、アニメーションクラスをリセット
+                if(modalCaption) {
+                    modalCaption.classList.add('opacity-0');
+                }
             };
 
-            modalClose.addEventListener('click', closeModal);
+            if(modalClose) modalClose.addEventListener('click', closeModal);
             modal.addEventListener('click', (e) => {
                 if (e.target === modal) closeModal();
             });
@@ -103,7 +133,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- 画像の遅延読み込み処理を関数化 ---
     function initializeLazyLoading() {
         const lazyImages = document.querySelectorAll('img.lazy');
-        if ('IntersectionObserver' in window) {
+        if ('IntersectionObserver' in window && lazyImages.length > 0) {
             let lazyImageObserver = new IntersectionObserver((entries, observer) => {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
@@ -115,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             });
             lazyImages.forEach((lazyImage) => lazyImageObserver.observe(lazyImage));
-        } else {
+        } else if (lazyImages.length > 0) {
             lazyImages.forEach((lazyImage) => {
                 lazyImage.src = lazyImage.dataset.src;
                 lazyImage.classList.remove('lazy');
@@ -135,4 +165,14 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => window.location.href = destination, 800);
         });
     });
+});
+
+// ▼▼▼ bfcache対策：ブラウザの「戻る」で表示が復元された際の処理を追加 ▼▼▼
+window.addEventListener('pageshow', function(event) {
+    const contentWrapper = document.getElementById('content-wrapper');
+    // event.persistedがtrueの場合、ページはbfcacheから復元されたことを示す
+    if (event.persisted && contentWrapper) {
+        // フェードアウトしたままになっているコンテンツを再度表示させる
+        contentWrapper.classList.add('is-loaded');
+    }
 });
