@@ -1,6 +1,6 @@
-/* デフォルトフォントを M PLUS 1p に変更 */
+/* デフォルトフォントを M PLUS 1 に変更 */
 body {
-    font-family: 'M PLUS 1p', sans-serif;
+    font-family: 'M PLUS 1', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background-image: url('img/recent_photo_01.jpg');
