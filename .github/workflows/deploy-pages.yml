@@ -1,0 +1,42 @@
+name: Build and Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Minify HTML and Copy Files
+        run: |
+          # npxを使って、インストール不要でHTML圧縮ツールを実行
+          # --remove-comments でコメントを削除
+          # --collapse-whitespace で余分な空白を削除（任意）
+          # 結果を 'public' ディレクトリに出力
+          npx html-minifier-terser --input-dir . --output-dir ./public --file-ext html --remove-comments --collapse-whitespace
+
+          # HTML以外のファイル（CSS, JS, 画像など）も 'public' ディレクトリにコピー
+          # もしCSSや画像ファイルがなければ、この行は不要です
+          find . -type f -not -name "*.html" -not -path "./.github/*" -not -path "./public/*" -exec cp --parents "{}" ./public/ \;
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './public'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
