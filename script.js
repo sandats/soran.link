@@ -79,6 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const highResSrc = thumbnail.dataset.src || thumbnail.src;
 
                     modalImg.src = highResSrc;
+                    modalImg.alt = title;
                     modalTitle.textContent = title;
                     modalDate.textContent = date;
 
