@@ -35,3 +35,13 @@ body {
 #modal {
     transition: opacity 0.3s ease-in-out;
 }
+
+/* 最初は透明にしておく */
+.lazy.photo-thumbnail {
+    opacity: 0;
+}
+/* is-loadedクラスが付与されたら、0.5秒かけて表示する */
+.photo-thumbnail.is-loaded {
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+}
