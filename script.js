@@ -71,14 +71,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const modalCaption = document.getElementById('modal-caption');
         const modalTitle = document.getElementById('modal-title');
         const modalDate = document.getElementById('modal-date');
-        const modalWorld = document.getElementById('modal-world'); // ワールド表示用の要素を取得
+        const modalWorld = document.getElementById('modal-world');
 
         if (modal && photoThumbnails.length > 0) {
             photoThumbnails.forEach(thumbnail => {
                 thumbnail.addEventListener('click', () => {
                     const highResSrc = thumbnail.dataset.src || thumbnail.src;
                     modalImg.src = highResSrc;
-                    modalImg.alt = thumbnail.alt || '';
 
                     // キャプション要素が存在する場合のみ、テキストを設定
                     if (modalCaption && modalTitle && modalDate && modalWorld) {
@@ -90,10 +89,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         modalTitle.textContent = title;
                         modalDate.textContent = date;
 
-                        // ワールド情報をクリアしてから設定
                         modalWorld.innerHTML = '';
                         if (worldName) {
-                            if (worldLink && worldLink !== '#') {
+                            if (worldLink) {
                                 const link = document.createElement('a');
                                 link.href = worldLink;
                                 link.target = '_blank';
@@ -117,7 +115,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const closeModal = () => {
                 modal.classList.add('hidden');
-                // キャプション要素が存在する場合のみ、アニメーションクラスをリセット
                 if(modalCaption) {
                     modalCaption.classList.add('opacity-0');
                 }
@@ -138,6 +135,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
                         let lazyImage = entry.target;
+
+                        // 画像が読み込み終わったら is-loaded クラスを追加
+                        lazyImage.onload = () => {
+                            lazyImage.classList.add('is-loaded');
+                        };
+
+                        // srcに実際のパスを設定して読み込みを開始
                         lazyImage.src = lazyImage.dataset.src;
                         lazyImage.classList.remove('lazy');
                         observer.unobserve(lazyImage);
@@ -146,6 +150,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             lazyImages.forEach((lazyImage) => lazyImageObserver.observe(lazyImage));
         } else if (lazyImages.length > 0) {
+            // IntersectionObserver非対応ブラウザ向けのフォールバック
             lazyImages.forEach((lazyImage) => {
                 lazyImage.src = lazyImage.dataset.src;
                 lazyImage.classList.remove('lazy');
