@@ -78,6 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 thumbnail.addEventListener('click', () => {
                     const highResSrc = thumbnail.dataset.src || thumbnail.src;
                     modalImg.src = highResSrc;
+                    modalImg.alt = thumbnail.alt || '';
 
                     // キャプション要素が存在する場合のみ、テキストを設定
                     if (modalCaption && modalTitle && modalDate && modalWorld) {
