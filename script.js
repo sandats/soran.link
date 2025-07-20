@@ -136,7 +136,12 @@ document.addEventListener('DOMContentLoaded', function() {
             };
 
             if(modalClose) modalClose.addEventListener('click', closeModal);
+
+            // ▼▼▼ 画像本体をクリックしても閉じるようにイベントを追加 ▼▼▼
+            if(modalImg) modalImg.addEventListener('click', closeModal);
+
             modal.addEventListener('click', (e) => {
+                // 画像やキャプション以外の背景部分がクリックされた場合のみ閉じる
                 if (e.target === modal) closeModal();
             });
         }
