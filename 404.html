@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ページが見つかりません | soran.link</title>
+
+    <!-- Tailwind CSSを読み込みます -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts (M PLUS 1) を読み込みます -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+1:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- 外部CSSファイルを読み込みます -->
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body class="text-slate-700">
+
+<!-- ========== コンテンツ全体をラップするコンテナ ========== -->
+<div id="content-wrapper" class="max-w-4xl mx-auto my-12 md:my-24 bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden">
+
+    <main class="p-6 sm:p-10 md:p-16">
+
+        <section id="not-found" class="text-center py-24">
+            <h1 class="text-6xl font-bold text-blue-600">404</h1>
+            <h2 class="mt-4 text-3xl font-bold text-slate-900">ページが見つかりませんでした</h2>
+            <p class="mt-6 text-slate-600 max-w-md mx-auto">
+                お探しのページは、移動または削除された可能性があります。
+                URLをご確認の上、再度お試しください。
+            </p>
+            <div class="mt-12">
+                <a href="/" class="page-transition-link inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full transition-colors duration-300">
+                    ホームに戻る
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+</div> <!-- コンテンツラッパーの終わり -->
+
+<!-- 外部JavaScriptファイルを読み込みます -->
+<script src="/script.js"></script>
+
+</body>
+</html>
