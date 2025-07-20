@@ -1,5 +1,7 @@
+# GitHub Actionsワークフローの名前
 name: Deploy to GitHub Pages and Purge Cloudflare Cache
 
+# ワークフローが実行されるタイミングを指定
 on:
   push:
     branches:
@@ -7,13 +9,20 @@ on:
   # 手動で実行することも可能にする
   workflow_dispatch:
 
+# 実行の重複を防ぐ設定
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+# ワークフローが必要とする権限
 permissions:
   contents: read
   pages: write
   id-token: write
 
+# ジョブ（実行される一連の処理）を定義
 jobs:
-  deploy:
+  build-and-deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -22,17 +31,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Minify HTML and Copy Files
+      - name: Prepare public directory
         run: |
-          # npxを使って、インストール不要でHTML圧縮ツールを実行
-          # --remove-comments でコメントを削除
-          # --collapse-whitespace で余分な空白を削除（任意）
-          # 結果を 'public' ディレクトリに出力
+          mkdir -p ./public
+          # HTMLファイルを圧縮してpublicにコピー
           npx html-minifier-terser --input-dir . --output-dir ./public --file-ext html --remove-comments --collapse-whitespace
-
-          # HTML以外のファイル（CSS, JS, 画像など）も 'public' ディレクトリにコピー
-          # もしCSSや画像ファイルがなければ、この行は不要です
-          find . -type f -not -name "*.html" -not -path "./.github/*" -not -path "./public/*" -exec cp --parents "{}" ./public/ \;
+          # JavaScriptファイルを圧縮してpublicにコピー
+          npx terser ./script.js -o ./public/script.js -c -m
+          # ビルドしたCSSやその他の必要なファイルをpublicにコピー
+          cp ./style.css ./public/
+          cp -r ./img ./public/
+          cp ./photos.json ./public/
+          # photoディレクトリ構造を作成し、HTMLをコピー
+          mkdir -p ./public/photo
+          cp ./photo/index.html ./public/photo/index.html
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
