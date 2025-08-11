@@ -4,7 +4,7 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['"M PLUS 1"', 'sans-serif'],
+                sans: ['"Shin Maru Go Regular"', '"M PLUS 1"', 'sans-serif'],
             },
         },
     },

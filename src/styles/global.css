@@ -3,7 +3,7 @@
 
 @layer base {
     body {
-        font-family: 'M PLUS 1', sans-serif;
+        font-family: 'Shin Maru Go Regular', 'M PLUS 1', sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         background-image: url('/img/recent_photo_01.jpg');
