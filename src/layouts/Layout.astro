@@ -14,6 +14,8 @@ const siteName = "そら | soran.link";
 const pageTitle = title === "そら | soran.link" ? siteName : `${title} | ${siteName}`;
 const ogpImage = "https://soran.link/img/ogp.jpg";
 const siteUrl = "https://soran.link";
+
+const currentYear = new Date().getFullYear();
 ---
 
 <!doctype html>
@@ -50,7 +52,7 @@ const siteUrl = "https://soran.link";
             <div class="mb-4">
                 <a href="/privacy" class="text-xs text-slate-500 hover:underline">プライバシーポリシー</a>
             </div>
-            <p>&copy; 2025 soran.link. All Rights Reserved.</p>
+            <p>&copy; {currentYear} soran.link. All Rights Reserved.</p>
         </div>
     </footer>
 </div>
