@@ -1,12 +1,14 @@
 <div id="modal" class="fixed inset-0 bg-[rgba(0,0,0,0.7)] z-50 hidden items-center justify-center p-4 transition-opacity duration-300">
-    <!-- ▼▼▼ レイアウト構造を修正し、コンテナが画像の幅に合うようにしました ▼▼▼ -->
-    <div class="inline-block max-w-full max-h-full">
-        <img id="modal-img" src="" alt="拡大写真" class="block max-w-full max-h-[calc(100vh-120px)] object-contain rounded-t-lg">
-        <div id="modal-caption" class="bg-black bg-opacity-70 text-white p-4 text-center rounded-b-lg">
+    <div class="flex flex-col max-w-full max-h-full">
+        <div class="flex-1 min-h-0 flex items-center justify-center">
+            <img id="modal-img" src="" alt="拡大写真" class="block max-w-full max-h-full object-contain rounded-t-lg">
+        </div>
+        <div id="modal-caption" class="flex-shrink-0 bg-black bg-opacity-70 text-white p-4 text-center rounded-b-lg">
             <h3 id="modal-title" class="font-bold text-lg"></h3>
             <p id="modal-date" class="text-sm"></p>
             <div id="modal-world" class="mt-2 text-sm"></div>
         </div>
+    </div>
     </div>
     <button id="modal-close" class="absolute top-5 right-5 text-white text-5xl font-bold">&times;</button>
 </div>
@@ -66,14 +68,7 @@
                 closeModal();
             }
         });
-        // 画像をクリックしてもモーダルが閉じるように修正
-        modalImg.addEventListener('click', (e) => {
-            // キャプション内のリンクをクリックした際にモーダルが閉じるのを防ぐ
-            if (e.target.tagName !== 'A') {
-                closeModal();
-            }
-        });
-        // キャプションをクリックしてもモーダルが閉じるように修正
+        modalImg.addEventListener('click', closeModal);
         if(modalCaption) {
             modalCaption.addEventListener('click', (e) => {
                 if (e.target.tagName !== 'A') {
