@@ -1,0 +1,56 @@
+# GitHub Actionsワークフローの名前
+name: Create Cloudflare Preview Deployment
+
+# ワークフローが実行されるタイミングを指定
+on:
+  # プルリクエストが作成されたり、更新されたときに実行
+  pull_request:
+
+# 実行の重複を防ぐ設定
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+# ワークフローが必要とする権限
+permissions:
+  contents: read
+  deployments: write
+  pull-requests: write
+
+# ジョブ（実行される一連の処理）を定義
+jobs:
+  publish-preview:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. リポジトリのコードをチェックアウト
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2. Node.js環境をセットアップ
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      # 3. 開発ツールをインストール
+      - name: Install dependencies
+        run: npm ci
+
+      # 4. Astroサイトをビルド
+      - name: Build Astro site
+        run: npm run build
+
+      # 5. Cloudflare Pagesにプレビューとしてデプロイ
+      - name: Publish to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          # 事前準備で登録したシークレットを利用
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          # Cloudflare Pagesで作成するプロジェクト名（任意の名前に変更可能）
+          projectName: 'soran-link'
+          # ビルドされたファイルが出力されるディレクトリ
+          directory: ./dist
+          # GitHubと連携するために必要
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
