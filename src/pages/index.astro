@@ -1,0 +1,138 @@
+---
+import Layout from '../layouts/Layout.astro';
+import photos from '../../public/photos.json';
+const recentPhotos = photos.slice(0, 3);
+---
+
+<Layout title="そら | soran.link">
+    <section id="hero" class="text-center pt-12 pb-16 md:pb-24">
+        <h1 class="text-4xl md:text-6xl font-bold text-slate-900 leading-tight">そら</h1>
+        <p class="mt-6 text-lg md:text-xl text-slate-600 max-w-2xl mx-auto">VRChatでのんびり遊んでるまめひなたです</p>
+    </section>
+    <section id="about" class="py-12 md:py-16 border-t border-slate-200 fade-in-section">
+        <div class="max-w-3xl mx-auto flex flex-col md:flex-row items-center gap-10">
+            <img src="/img/about_me.webp" alt="sorans" class="w-32 h-32 md:w-40 md:h-40 rounded-full shadow-lg shrink-0">
+            <div class="text-center md:text-left">
+                <h2 class="text-2xl font-bold text-slate-900 mb-4">About Me</h2>
+                <p class="leading-relaxed">
+                    初めまして！2024年2月にVRChatに生まれた「そら」と言います。
+                    <br><br>
+                    VRChatでのんびり過ごしたり、お酒を飲んだり、おしゃべりしたりしてます。
+                </p>
+            </div>
+        </div>
+    </section>
+    <section id="profile" class="py-12 md:py-16 border-t border-slate-200 fade-in-section">
+        <div class="max-w-3xl mx-auto">
+            <h2 class="text-2xl font-bold text-slate-900 mb-8 text-center md:text-left">My Profile & Hobbies</h2>
+            <div class="space-y-4 text-slate-600">
+                <p>好きなことや趣味など</p>
+                <ul class="list-disc list-inside space-y-2 pl-2">
+                    <li>好き: コードを書くこと、お酒を飲むこと、アニメを見ること</li>
+                    <li>趣味: コンサートやライブに行くこと（BUMP OF CHICKEN, sumika, ゲーム音楽: FINAL FANTASY、原神、アニメ: ）</li>
+                    <li>ゲーム: 最近は遊んでおらず…</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="vrchat-status" class="py-12 md:py-16 border-t border-slate-200 fade-in-section">
+        <div class="max-w-3xl mx-auto">
+            <h2 class="text-2xl font-bold text-slate-900 mb-8 text-center md:text-left">VRChat Status</h2>
+            <div class="space-y-5 text-slate-600 bg-slate-50/70 p-6 rounded-lg">
+                <p class="text-sm text-slate-500 mb-4">私のVRChatでのステータスは以下の通りです。気軽にJoinしてくださいね！</p>
+                <div class="flex items-start gap-4">
+                    <div class="w-4 h-4 rounded-full bg-blue-500 mt-1 shrink-0"></div>
+                    <div>
+                        <h3 class="font-bold text-slate-800">だれでもおいで (青)</h3>
+                        <p>誰でも自由にJoinできる状態です。お気軽にどうぞ！</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4">
+                    <div class="w-4 h-4 rounded-full bg-green-500 mt-1 shrink-0"></div>
+                    <div>
+                        <h3 class="font-bold text-slate-800">オンライン (緑)</h3>
+                        <p>オンライン中です。Joinリクエストを送っていただければ対応します。</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4">
+                    <div class="w-4 h-4 rounded-full bg-orange-500 mt-1 shrink-0"></div>
+                    <div>
+                        <h3 class="font-bold text-slate-800">きいてみてね (オレンジ)</h3>
+                        <p>何かしている可能性があります。Join前にメッセージで確認をお願いします。</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4">
+                    <div class="w-4 h-4 rounded-full bg-red-500 mt-1 shrink-0"></div>
+                    <div>
+                        <h3 class="font-bold text-slate-800">取り込み中 (赤)</h3>
+                        <p>取り込み中、または離席中です。今はそっとしておいてください。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="links" class="py-12 md:py-16 border-t border-slate-200 fade-in-section">
+        <div class="max-w-3xl mx-auto">
+            <h2 class="text-2xl font-bold text-slate-900 mb-8 text-center md:text-left">Links</h2>
+            <div class="space-y-6">
+                <a href="https://vrchat.com/home/user/usr_532f89ae-02bf-4a85-a314-c8578f10b87d" target="_blank" rel="noopener noreferrer" class="flex items-center gap-5 p-5 bg-slate-50/70 hover:bg-slate-100 rounded-lg transition-colors duration-300">
+                    <div class="shrink-0">
+                        <img src="/img/VRChat Logo Black.png" alt="VRChat Logo Black" class="h-8 w-8 rounded object-contain">
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-lg">VRChat</h3>
+                        <p class="text-slate-600 text-sm">sorans</p>
+                    </div>
+                </a>
+                <a href="https://x.com/sora_ameno" target="_blank" rel="noopener noreferrer" class="flex items-center gap-5 p-5 bg-slate-50/70 hover:bg-slate-100 rounded-lg transition-colors duration-300">
+                    <div class="shrink-0 text-slate-800">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="currentColor" viewBox="0 0 512 512" aria-hidden="true" focusable="false">
+                            <path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-lg">X (旧Twitter)</h3>
+                        <p class="text-slate-600 text-sm">VRChatで撮った写真や時々リアルの事をつぶやいたり。</p>
+                    </div>
+                </a>
+                <a href="https://open.spotify.com/user/siidd6nqjb057eu4gybyte7uu?si=a0a61ae49d864947" target="_blank" rel="noopener noreferrer" class="flex items-center gap-5 p-5 bg-slate-50/70 hover:bg-slate-100 rounded-lg transition-colors duration-300">
+                    <div class="shrink-0 text-green-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="currentColor" viewBox="0 0 496 512">
+                            <path d="M248 8C111.1 8 0 119.1 0 256s111.1 248 248 248 248-111.1 248-248S384.9 8 248 8zM348.5 370.3c-1.2 2.5-4.1 3.2-6.5 2-62.8-38.1-141.2-46.5-233.6-25.4-2.8.6-5.5-1.1-6.1-3.9-.6-2.8 1.1-5.5 3.9-6.1 97-22.1 181.1-12.9 249.7 28.1 2.4 1.2 3.2 4.1 2 6.3zm12.6-62.5c-1.6 3.1-5.1 4.2-8.2 2.6-70.3-42.3-176.5-54.4-259.9-30.3-3.4.9-6.9-1.3-7.8-4.7-.9-3.4 1.3-6.9 4.7-7.8 88.8-25.3 202.8-12.3 279.9 33.6 3.1 1.6 4.2 5.1 2.6 8.2zm1.1-64.8c-87.2-52.2-224.5-58.3-268.3-32.3-4 .9-8.4-1.5-9.3-5.5-.9-4 1.5-8.4 5.5-9.3 49.3-28.5 195.2-21.5 290.7 34.3 3.9 2.3 5.2 7.1 2.9 11-2.3 3.9-7.1 5.2-11 2.9z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-lg">Spotify</h3>
+                        <p class="text-slate-600 text-sm">よく聴く音楽やプレイリストを公開しています。</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+    <section id="photos" class="py-16 md:py-24 border-t border-slate-200 fade-in-section">
+        <div class="max-w-5xl mx-auto">
+            <h2 class="text-2xl font-bold text-slate-900 mb-8 text-center">Recent Photos</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {recentPhotos.map(photo => (
+                        <img
+                                src={photo.src}
+                                alt={photo.alt}
+                                data-date={photo.date}
+                                class="photo-thumbnail w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
+                        />
+                ))}
+            </div>
+        </div>
+    </section>
+    <section id="photo-gallery-link" class="py-16 md:py-24 border-t border-slate-200 fade-in-section">
+        <div class="max-w-3xl mx-auto text-center">
+            <h2 class="text-2xl font-bold text-slate-900 mb-4">Photo Gallery</h2>
+            <p class="text-slate-600 mb-8">VRChatで撮った写真ギャラリーです。</p>
+            <a href="/photo/" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full transition-colors duration-300">
+                他の写真を見る
+            </a>
+        </div>
+    </section>
+</Layout>

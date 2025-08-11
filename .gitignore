@@ -16,11 +16,6 @@ pnpm-debug.log*
 # GitHub Actionsが自動生成する、公開用のファイルが格納されるディレクトリ
 /public
 
-# GitHub Actionsが自動生成する、Tailwind CSSのビルド結果ファイル
-# ソースは src/input.css なので、生成物はリポジトリに含めない
-/style.css
-
-
 # ===================================================================
 # OS / エディタ固有のファイル
 # ===================================================================
@@ -36,10 +31,18 @@ Thumbs.db
 # Visual Studio Code
 .vscode/
 
+# build output
+dist/
 
-# ===================================================================
-# 任意
-# ===================================================================
-# 依存関係を厳密に管理するファイル。
-# チーム開発では必須ですが、個人の場合はコメントアウトしても問題ありません。
-# package-lock.json
+# generated types
+.astro/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# environment variables
+.env
+.env.production

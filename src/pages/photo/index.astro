@@ -1,0 +1,93 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import photos from '../../../public/photos.json';
+
+// 写真を月別にグループ化し、新しい順にソート
+const groupedPhotos = photos.reduce((groups, photo) => {
+    const date = photo.date;
+    if (date && date.match(/^\d{4}-\d{2}-\d{2}$/)) {
+        const yearMonth = date.substring(0, 7);
+        if (!groups[yearMonth]) {
+            groups[yearMonth] = [];
+        }
+        groups[yearMonth].push(photo);
+    }
+    return groups;
+}, {});
+
+const sortedMonths = Object.keys(groupedPhotos).sort().reverse();
+---
+
+<Layout title="Photo Gallery">
+    <section id="gallery-main">
+        <div class="text-center">
+            <h1 class="text-4xl md:text-5xl font-bold text-slate-900">Photo Gallery</h1>
+            <p class="mt-4 text-slate-600">クリックで拡大表示します。</p>
+        </div>
+
+        <div id="photo-gallery-container" class="mt-12">
+            {sortedMonths.map(month => {
+                const [year, monthNum] = month.split('-');
+                return (
+                        <>
+                            <h2 class="text-2xl font-bold text-slate-800 mt-12 mb-6 pl-2 border-l-4 border-blue-500">
+                                {year}年{parseInt(monthNum, 10)}月
+                            </h2>
+                            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                                {groupedPhotos[month].map(photo => (
+                                        <img
+                                                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                                                data-src={photo.src}
+                                                alt={photo.alt}
+                                                data-date={photo.date}
+                                                data-world-name={photo.worldName}
+                                                data-world-link={photo.worldLink}
+                                                class="lazy photo-thumbnail w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
+                                                style={`object-position: ${photo.position || 'center center'};`}
+                                                loading="lazy"
+                                        />
+                                ))}
+                            </div>
+                        </>
+                )
+            })}
+        </div>
+
+        <div class="text-center mt-16">
+            <a href="/" class="text-blue-600 hover:underline">ホームに戻る</a>
+        </div>
+    </section>
+</Layout>
+
+<script>
+    // Astroでは、ページ遷移後もスクリプトを再実行するために'astro:page-load'イベントを使います
+    document.addEventListener('astro:page-load', () => {
+        const lazyImages = document.querySelectorAll('img.lazy');
+        if ('IntersectionObserver' in window && lazyImages.length > 0) {
+            let lazyImageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        let lazyImage = entry.target as HTMLImageElement;
+                        lazyImage.onload = () => {
+                            lazyImage.classList.add('is-loaded');
+                        };
+                        lazyImage.src = lazyImage.dataset.src;
+                        lazyImage.classList.remove('lazy');
+                        observer.unobserve(lazyImage);
+                    }
+                });
+            });
+            lazyImages.forEach((lazyImage) => lazyImageObserver.observe(lazyImage));
+        }
+    });
+</script>
+
+<style>
+    .lazy.photo-thumbnail {
+        opacity: 0;
+    }
+    .photo-thumbnail.is-loaded {
+        opacity: 1;
+        transition: opacity 0.5s ease-in-out;
+    }
+</style>
