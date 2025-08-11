@@ -1,0 +1,38 @@
+@import url("https://fonts.googleapis.com/css2?family=M+PLUS+1:wght@400;700&display=swap");
+@import "tailwindcss";
+
+@layer base {
+    body {
+        font-family: 'M PLUS 1', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background-image: url('/img/recent_photo_01.jpg');
+        background-size: cover;
+        background-position: center 70%;
+        background-attachment: fixed;
+    }
+}
+@layer components {
+    /* コンテンツ全体の初期表示アニメーション */
+    #content-wrapper {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeIn 0.8s ease-out forwards;
+    }
+    @keyframes fadeIn {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    /* スクロールに応じたセクションごとのアニメーション */
+    .fade-in-section {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    .fade-in-section.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

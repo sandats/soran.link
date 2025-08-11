@@ -1,0 +1,19 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="ページが見つかりません">
+    <section id="not-found" class="text-center py-24">
+        <h1 class="text-6xl font-bold text-blue-600">404</h1>
+        <h2 class="mt-4 text-3xl font-bold text-slate-900">ページが見つかりませんでした</h2>
+        <p class="mt-6 text-slate-600 max-w-md mx-auto">
+            お探しのページは、移動または削除された可能性があります。
+            URLをご確認の上、再度お試しください。
+        </p>
+        <div class="mt-12">
+            <a href="/" class="page-transition-link inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full transition-colors duration-300">
+                ホームに戻る
+            </a>
+        </div>
+    </section>
+</Layout>

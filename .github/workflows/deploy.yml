@@ -1,12 +1,11 @@
 # GitHub Actionsワークフローの名前
-name: Deploy to GitHub Pages and Purge Cloudflare Cache
+name: Deploy Astro to GitHub Pages
 
 # ワークフローが実行されるタイミングを指定
 on:
   push:
     branches:
       - main
-  # 手動で実行することも可能にする
   workflow_dispatch:
 
 # 実行の重複を防ぐ設定
@@ -28,33 +27,39 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
+      # 1. リポジトリのコードをチェックアウト
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Prepare public directory
-        run: |
-          mkdir -p ./public
-          # HTMLファイルを圧縮してpublicにコピー
-          npx html-minifier-terser --input-dir . --output-dir ./public --file-ext html --remove-comments --collapse-whitespace
-          # JavaScriptファイルを圧縮してpublicにコピー
-          npx terser ./script.js -o ./public/script.js -c -m
-          # ビルドしたCSSやその他の必要なファイルをpublicにコピー
-          cp ./style.css ./public/
-          cp -r ./img ./public/
-          cp ./photos.json ./public/
-          # photoディレクトリ構造を作成し、HTMLをコピー
-          mkdir -p ./public/photo
-          cp ./photo/index.html ./public/photo/index.html
+      # 2. Node.js環境をセットアップ
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # LTS版のNode.jsバージョンを指定
+          cache: 'npm'
 
+      # 3. 開発ツールをインストール
+      - name: Install dependencies
+        run: npm ci
+
+      # 4. Astroサイトをビルド
+      # `npm run build` を実行すると、`dist` ディレクトリに公開用ファイルが生成されます
+      - name: Build Astro site
+        run: npm run build
+
+      # 5. GitHub Pagesにアップロードするファイルを準備
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './public'
+          # Astroがビルドした成果物が出力される `dist` ディレクトリを指定
+          path: ./dist
 
+      # 6. GitHub Pagesにデプロイを実行
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
 
+      # 7. デプロイ完了後、Cloudflareのキャッシュをクリア
       - name: Purge Cloudflare cache
         uses: jakejarvis/cloudflare-purge-action@v0.3.0
         env:
