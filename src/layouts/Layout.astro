@@ -39,11 +39,10 @@ const currentYear = new Date().getFullYear();
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <!-- View Transitions for smooth page navigation -->
     <ViewTransitions />
 </head>
 <body class="text-slate-700">
-<div id="content-wrapper" class="max-w-4xl mx-auto my-12 md:my-24 bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden">
+<div class="max-w-4xl mx-auto my-12 md:my-24 bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden">
     <main class="p-6 sm:p-10 md:p-16">
         <slot />
     </main>
@@ -68,15 +67,6 @@ const currentYear = new Date().getFullYear();
         background-position: center 70%;
         background-attachment: fixed;
     }
-    #content-wrapper {
-        opacity: 0;
-        transform: translateY(20px);
-        transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-    }
-    #content-wrapper.is-loaded {
-        opacity: 1;
-        transform: translateY(0);
-    }
     .fade-in-section {
         opacity: 0;
         transform: translateY(20px);
@@ -87,14 +77,8 @@ const currentYear = new Date().getFullYear();
         transform: translateY(0);
     }
 </style>
-
 <script>
     document.addEventListener('astro:page-load', () => {
-        const contentWrapper = document.getElementById('content-wrapper');
-        if (contentWrapper) {
-            contentWrapper.classList.add('is-loaded');
-        }
-
         const sections = document.querySelectorAll('.fade-in-section');
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
