@@ -1,7 +1,6 @@
 ---
-import { ClientRouter } from 'astro:transitions';
+import { ViewTransitions } from 'astro:transitions';
 import Modal from '../components/Modal.astro';
-// CSSファイルをインポートします
 import '../styles/global.css';
 
 interface Props {
@@ -13,6 +12,7 @@ const { title, description = 'VRChatで遊んでいる「そら」のサイト�
 const siteName = "そら | soran.link";
 const pageTitle = title === "そら | soran.link" ? siteName : `${title} | ${siteName}`;
 const ogpImage = "https://soran.link/img/ogp.jpg";
+const siteUrl = "https://soran.link";
 
 const currentYear = new Date().getFullYear();
 ---
@@ -38,7 +38,7 @@ const currentYear = new Date().getFullYear();
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <ClientRouter />
+    <ViewTransitions />
 </head>
 <body class="text-slate-700">
 <div class="max-w-4xl mx-auto my-12 md:my-24 bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden">
@@ -68,6 +68,7 @@ const currentYear = new Date().getFullYear();
     }
     .fade-in-section {
         opacity: 0;
+        transform: translateY(20px);
         animation: fadeInSection 0.6s ease-out forwards;
     }
     @keyframes fadeInSection {
@@ -80,6 +81,91 @@ const currentYear = new Date().getFullYear();
         }
     }
 </style>
+<script>
+    document.addEventListener('astro:page-load', () => {
+        // --- 1. 各セクションを監視する処理 ---
+        const sections = document.querySelectorAll('.fade-in-section');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        sections.forEach(section => observer.observe(section));
+
+        // --- 2. 写真拡大モーダルのための処理 ---
+        const photoThumbnails = document.querySelectorAll('.photo-thumbnail');
+        const modal = document.getElementById('modal');
+        const modalImg = document.getElementById('modal-img');
+        const modalClose = document.getElementById('modal-close');
+
+        const modalCaption = document.getElementById('modal-caption');
+        const modalTitle = document.getElementById('modal-title');
+        const modalDate = document.getElementById('modal-date');
+        const modalWorld = document.getElementById('modal-world');
+
+        if (!modal || !modalImg || photoThumbnails.length === 0) return;
+
+        const openModal = (thumbnail) => {
+            modalImg.src = thumbnail.src || thumbnail.dataset.src;
+
+            if (modalCaption && modalTitle && modalDate && modalWorld) {
+                const title = thumbnail.alt || '';
+                const date = thumbnail.dataset.date || '';
+                const worldName = thumbnail.dataset.worldName || '';
+                const worldLink = thumbnail.dataset.worldLink || '';
+
+                modalTitle.textContent = title;
+                modalDate.textContent = date;
+
+                modalWorld.innerHTML = '';
+                if (worldName) {
+                    if (worldLink) {
+                        modalWorld.innerHTML = `<a href="${worldLink}" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">World: ${worldName}</a>`;
+                    } else {
+                        modalWorld.textContent = `World: ${worldName}`;
+                    }
+                }
+            }
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        };
+
+        const closeModal = () => {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        };
+
+        photoThumbnails.forEach((thumbnail) => {
+            // Astroのページ遷移でリスナーが重複しないように、一度削除してから追加します
+            const newThumbnail = thumbnail.cloneNode(true);
+            thumbnail.parentNode.replaceChild(newThumbnail, thumbnail);
+            newThumbnail.addEventListener('click', () => openModal(newThumbnail));
+        });
+
+        modalClose.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target.id === 'modal') {
+                closeModal();
+            }
+        });
+        modalImg.addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeModal();
+        });
+        if(modalCaption) {
+            modalCaption.addEventListener('click', (e) => {
+                if (e.target.tagName !== 'A') {
+                    e.stopPropagation();
+                    closeModal();
+                }
+            });
+        }
+    });
+</script>
 <script type="text/javascript" src="//typesquare.com/3/tsst/script/ja/typesquare.js?5e27f6df91004ae4bf9f35d4ac1e0217" charset="utf-8"></script>
 </body>
 </html>
