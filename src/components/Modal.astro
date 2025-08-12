@@ -1,9 +1,7 @@
 <div id="modal" class="fixed inset-0 bg-[rgba(0,0,0,0.7)] z-50 hidden items-center justify-center p-4 transition-opacity duration-300">
-    <div class="flex flex-col max-w-full max-h-full">
-        <div class="flex-1 min-h-0 flex items-center justify-center">
-            <img id="modal-img" src="" alt="拡大写真" class="block max-w-full max-h-full object-contain rounded-t-lg">
-        </div>
-        <div id="modal-caption" class="flex-shrink-0 bg-black bg-opacity-70 text-white p-4 text-center rounded-b-lg">
+    <div class="relative inline-block max-w-full max-h-full">
+        <img id="modal-img" src="" alt="拡大写真" class="block max-w-full max-h-full object-contain rounded-lg">
+        <div id="modal-caption" class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 text-white p-4 text-center rounded-b-lg">
             <h3 id="modal-title" class="font-bold text-lg"></h3>
             <p id="modal-date" class="text-sm"></p>
             <div id="modal-world" class="mt-2 text-sm"></div>
@@ -11,69 +9,3 @@
     </div>
     <button id="modal-close" class="absolute top-5 right-5 text-white text-5xl font-bold">&times;</button>
 </div>
-
-<script>
-    document.addEventListener('astro:page-load', () => {
-        const photoThumbnails = document.querySelectorAll('.photo-thumbnail');
-        const modal = document.getElementById('modal');
-        const modalImg = document.getElementById('modal-img');
-        const modalClose = document.getElementById('modal-close');
-
-        const modalCaption = document.getElementById('modal-caption');
-        const modalTitle = document.getElementById('modal-title');
-        const modalDate = document.getElementById('modal-date');
-        const modalWorld = document.getElementById('modal-world');
-
-        if (!modal || photoThumbnails.length === 0) return;
-
-        const openModal = (thumbnail) => {
-            modalImg.src = thumbnail.src || thumbnail.dataset.src;
-
-            if (modalCaption && modalTitle && modalDate && modalWorld) {
-                const title = thumbnail.alt || '';
-                const date = thumbnail.dataset.date || '';
-                const worldName = thumbnail.dataset.worldName || '';
-                const worldLink = thumbnail.dataset.worldLink || '';
-
-                modalTitle.textContent = title;
-                modalDate.textContent = date;
-
-                modalWorld.innerHTML = '';
-                if (worldName) {
-                    if (worldLink) {
-                        modalWorld.innerHTML = `<a href="${worldLink}" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">World: ${worldName}</a>`;
-                    } else {
-                        modalWorld.textContent = `World: ${worldName}`;
-                    }
-                }
-            }
-
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        };
-
-        const closeModal = () => {
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        };
-
-        photoThumbnails.forEach((thumbnail) => {
-            thumbnail.addEventListener('click', () => openModal(thumbnail));
-        });
-
-        modalClose.addEventListener('click', closeModal);
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                closeModal();
-            }
-        });
-        modalImg.addEventListener('click', closeModal);
-        if(modalCaption) {
-            modalCaption.addEventListener('click', (e) => {
-                if (e.target.tagName !== 'A') {
-                    closeModal();
-                }
-            });
-        }
-    });
-</script>
