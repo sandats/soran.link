@@ -69,28 +69,18 @@ const currentYear = new Date().getFullYear();
     }
     .fade-in-section {
         opacity: 0;
-        transform: translateY(20px);
-        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        animation: fadeInSection 0.6s ease-out forwards;
     }
-    .fade-in-section.is-visible {
-        opacity: 1;
-        transform: translateY(0);
+    @keyframes fadeInSection {
+        from {
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 </style>
-<script>
-    document.addEventListener('astro:page-load', () => {
-        const sections = document.querySelectorAll('.fade-in-section');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('is-visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.1 });
-        sections.forEach(section => observer.observe(section));
-    });
-</script>
 <script type="text/javascript" src="//typesquare.com/3/tsst/script/ja/typesquare.js?5e27f6df91004ae4bf9f35d4ac1e0217" charset="utf-8"></script>
 </body>
 </html>
